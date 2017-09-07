@@ -22,11 +22,9 @@ export class Haiku {
 
   isVowel(char) {
     let givenVowels = ['a', 'e', 'i', 'o', 'u'];
-    givenVowels.forEach(function(vowel) {
-      if(char === vowel) {
+      if (givenVowels.indexOf(char) != -1 ){
         return true;
       }
-    });
     return false;
   }
 
@@ -42,6 +40,10 @@ export class Haiku {
 
     let duplicates = 0;
 
+    if(word.length <= 1) {
+      return duplicates;
+    }
+
     for(let i = 0; i < word.length - 2; i++) {
       if(this.isVowel(word[i])) {
         if(this.isVowel(word[i+1])) {
@@ -52,13 +54,28 @@ export class Haiku {
     return duplicates;
   }
 
+  containsYSyllable(word) {
+    let ySyllables = 0;
+
+    for (let i = 1; i < word.length; i++) {
+      if (word[i] === "y") {
+        if (!(this.isVowel(word[i - 1]))) {
+          ySyllables++;
+        }
+      }
+    }
+
+    return ySyllables;
+  }
+
   countSyllables(word) {
-    wordArry = word.split("");
+    // wordArry = word.split("");
 
-    let syllables = this.countVowelsInWord(wordArry);
+    let syllables = this.countVowelsInWord(word);
 
-    syllables -= this.countSilentEs(wordArry);
-    syllables -= this.countDuplicateVowels(wordArry);
+    syllables -= this.countSilentEs(word);
+    syllables -= this.countDuplicateVowels(word);
+    syllables += this.containsYSyllable(word);
 
     return syllables;
   }
